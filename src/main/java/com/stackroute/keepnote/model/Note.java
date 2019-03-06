@@ -7,6 +7,11 @@ import java.time.LocalDateTime;
  */
 public class Note {
 
+	private int NoteId;
+	private String NoteTitle;
+	private String NoteContent;
+	private String NoteStatus;
+	LocalDateTime createdAt;
 	/*
 	 * This class should have five fields (noteId, noteTitle, noteContent,
 	 * noteStatus and createdAt). This class should also contain the getters and
@@ -20,44 +25,48 @@ public class Note {
 	/* All the getters/setters definition should be implemented here */
 
 	public int getNoteId() {
-		return 0;
+		return NoteId;
 
 	}
 
 	public void setNoteId(int intid) {
+		this.NoteId=intid;
 
 	}
 
 	public String getNoteTitle() {
-		return null;
+		return NoteTitle;
 	}
 
 	public void setNoteTitle(String string) {
+		this.NoteTitle=string;
 
 	}
 
 	public String getNoteContent() {
-		return null;
+		return NoteContent;
 	}
 
 	public void setNoteContent(String string) {
+		this.NoteContent=string;
 
 	}
 
 	public String getNoteStatus() {
-		return null;
+		return NoteStatus;
 	}
 
 	public void setNoteStatus(String string) {
+		this.NoteStatus=string;
 
 	}
 
 	public LocalDateTime getCreatedAt() {
-		return null;
+		return createdAt;
 	}
 
-	public void setCreatedAt(LocalDateTime localdatetime) {
-
+	public void setCreatedAt(LocalDateTime localDateTime) {
+		this.createdAt=localDateTime;
 	}
 
 	/* Override the toString() method */

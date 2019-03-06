@@ -1,11 +1,26 @@
 package com.stackroute.keepnote.controller;
 
 
-/*Annotate the class with @Controller annotation. @Controller annotation is used to mark 
+import com.stackroute.keepnote.model.Note;
+import com.stackroute.keepnote.repository.NoteRepository;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.time.LocalDateTime;
+
+/*Annotate the class with @Controller annotation. @Controller annotation is used to mark
  * any POJO class as a controller so that Spring can recognize this class as a Controller
  * */
-
+@Controller
 public class NoteController {
+
+	ApplicationContext applicationContext;
+	Note note;
+	NoteRepository noteRepository;
 	/*
 	 * From the problem statement, we can understand that the application
 	 * requires us to implement the following functionalities.
@@ -21,13 +36,22 @@ public class NoteController {
 	 * Get the application context from resources/beans.xml file using ClassPathXmlApplicationContext() class.
 	 * Retrieve the Note object from the context.
 	 * Retrieve the NoteRepository object from the context.
-	 */
-	
-	
+	 */public NoteController() {
+		 applicationContext = new ClassPathXmlApplicationContext("beans.xml");
+		 note = (Note) applicationContext.getBean("note");
+		 noteRepository = (NoteRepository) applicationContext.getBean("noteRepository");
+	}
 	/*Define a handler method to read the existing notes by calling the getAllNotes() method 
 	 * of the NoteRepository class and add it to the ModelMap which is an implementation of Map 
 	 * for use when building model data for use with views. it should map to the default URL i.e. "/" */
-	
+	@RequestMapping("/")
+	public String handlerMethod(ModelMap modelMap)
+	{
+		modelMap.addAttribute("saveinfo",noteRepository.getAllNotes());
+
+		modelMap.addAttribute("output",noteRepository.getAllNotes());
+            return "index";
+	}
 	
 	/*Define a handler method which will read the Note data from request parameters and
 	 * save the note by calling the addNote() method of NoteRepository class. Please note 
@@ -37,11 +61,30 @@ public class NoteController {
 	 * should be sent back to the view using ModelMap.
 	 * This handler method should map to the URL "/saveNote". 
 	*/
-	
+	@RequestMapping("/saveNote")
+	public String handlerMethod2(@RequestParam("noteId") int noteId,@RequestParam("noteTitle") String noteTitle,@RequestParam("noteStatus") String noteStatus,@RequestParam("noteContent") String noteContent,ModelMap modelMap  )
+	{
+		Note note1 = new Note();
+		note1.setNoteId(noteId);
+		note1.setNoteContent(noteContent);
+		note1.setNoteStatus(noteStatus);
+		note1.setNoteTitle(noteTitle);
+		note1.setCreatedAt(LocalDateTime.now());
+		noteRepository.addNote(note1);
+		modelMap.addAttribute("saveinfo",noteRepository.getAllNotes());
+		return "index";
+	}
 	
 	/* Define a handler method to delete an existing note by calling the deleteNote() method 
 	 * of the NoteRepository class
 	 * This handler method should map to the URL "/deleteNote" 
 	*/
-	
+
+	@RequestMapping("/deleteNote")
+	public String handler3(ModelMap modelMap,@RequestParam("noteId") int noteId)
+	{
+		noteRepository.deleteNote(noteId);
+	//modelMap.addAttribute(noteRepository.getAllNotes());
+		return "redirect:/";
+	}
 }
